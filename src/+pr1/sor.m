@@ -27,11 +27,11 @@ U = triu(A, 1);
 iters = 0;
 x = sparse(x0);
 wLD = w*L + D;
-wLDinv = wLD\eye(n);
+% wLDinv = wLD\eye(n);
 
 while (norm(x - x_cor, Inf) > tol) && (iters < maxit)
-    x = wLDinv*(((1-w)*D*x - w*U*x) + w*b);
-%     x = wLD\(((1-w)*D*x - w*U*x) + w*b);
+%     x = wLDinv*(((1-w)*D*x - w*U*x) + w*b);
+    x = wLD\(((1-w)*D*x - w*U*x) + w*b);
     iters = iters + 1;
     time_out();
 end

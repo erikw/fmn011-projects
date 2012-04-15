@@ -102,7 +102,7 @@ Task \# & Result \\ \hline
 4		& $k=10$                                                                     \\
 5		& $k=22$	                                                             \\
 6		& $\omega\in[1.105500, 1.212400]$                                            \\
-7		& $k$                                                                      \\ % TODO insert result.
+7		& $k=13$                                                                     \\
 8		& $k=22$                                                                     \\
 9		& \emph{n/a}                                                                 \\
 10		& Orig: $0.008563$s, Pert: $0.008500$s, $\frac{Pert}{Orig}=99.25\%$ 	     \\
@@ -202,12 +202,12 @@ The iterative SOR method on the other hand does not need to change the structure
 \end{figure}
 
 \subsection{Task \#7}
-% TODO paste result
-% TODO compare
+Running for $5$ hours SOR was able to solve systems with $2^{13}$ unknowns. This is better then the naive GE probalby since it finds solution that are only correct to the 4th decimal. However it is much slower than GE using \matlab{}s backslash operator. This hints about the sprase structure not being fully exploited here.
 
 \subsection{Task \#8}
-Using the backslash operator is more efficient than multiplying with the inverse because\ldots % TODO
-After this change was made the script for task \#7 was now showed that SOR could solve systems with $2^{22}$ unknowns. This is the same number as in task \#5 where the backslash operator also was used. Thus the SOR implementation is now more efficient! % TODO was it so?
+Mathematically it is the same equation being solved but using the backslash operator is more efficient than multiplying with the inverse because at each iteration step we have the matrix $\omega L + D$ which is a lower triangluar sprase matrix and the backslash operator sees this and can optimize using only forward substitution instread of the costly matrix multiplication.
+
+After this change was made the script for task \#7 was now showed that SOR could solve systems with $2^{22}$ unknowns. This is the same number as in task \#5 where the backslash operator also was used. Thus the SOR implementation is now more efficient!
 
 \subsection{Task \#10}
 With $n=8$ and $100$ time measurements, the mean time for solving the original system ($A\times x=b$) with naive Gaussian elimination is $0.008563$ seconds  and for the perturbed system ($A_p\times x=b_p$) $0.008500$ seconds (i.e. $99.26\%$ of the original mean time). We see that there is almost no difference in solving a slightly different system.
