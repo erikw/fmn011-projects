@@ -19,7 +19,7 @@ while can_solve
 		fprintf(2, 'Can''t solve more. Time out reached. \n');
 	end
 end
-fprintf(1, 'In %i seconds both the original and perturbed system could be solved with Gaussian elimination with a system 2^%i unknowns. For the largest system solved; orig_mean=%.5fs and pert_mean=%.5fs (i.e. %.2f%% of the original mean time).\n', maxtime, (log2(n)-1), orig_mean, pert_mean, percent);
+fprintf(1, 'In %i seconds both the original and perturbed system could be solved with Gaussian elimination with a system 2^%i unknowns. For the largest system solved; orig_mean=%.5fs and pert_mean=%.5fs (i.e. %.2f%% of the original mean time).\n\n', maxtime, (log2(n)-1), orig_mean, pert_mean, percent);
 
 % Find largest k for SOR.
 n = 8;

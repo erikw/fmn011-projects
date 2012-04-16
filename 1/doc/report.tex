@@ -1,9 +1,10 @@
-% TODO make sure all results in the code is commented and tagged as result
 \documentclass[10pt, a4paper]{article}
 \usepackage[T1]{fontenc}
 \usepackage[utf8x]{inputenc}
 \usepackage{ifpdf}
 \usepackage{graphicx}
+\usepackage{array}
+\usepackage{multirow}
 
 
 \usepackage{listings}	% For program listings.
@@ -96,20 +97,21 @@ In table \ref{table+result} a concise presentation of the results can be found. 
 \begin{center}
 \begin{tabular}{r | l}
 Task \# & Result \\ \hline
-1		& $4\times n-6$ elements                                                     \\
-2		& \emph{n/a}                                                                 \\
-3		& \emph{n/a}                                                                 \\
-4		& $k=10$                                                                     \\
-5		& $k=22$	                                                             \\
-6		& $\omega\in[1.105500, 1.212400]$                                            \\
-7		& $k=13$                                                                     \\
-8		& $k=22$                                                                     \\
-9		& \emph{n/a}                                                                 \\
-10		& Orig: $0.008563$s, Pert: $0.008500$s, $\frac{Pert}{Orig}=99.25\%$ 	     \\
-11		& Orig: $0.003601$s, Pert: $0.001449$s, $\frac{Pert}{Orig}=40.23\%$ 	     \\
-12		& GE, $k=X \Rightarrow$ Orig: $Y$s, Pert: $Z$s, $\frac{Pert}{Orig}=V\%$      \\ % TODO insert result.
-12		& SOR, $k=X \Rightarrow$ Orig: $Y$s, Pert: $Z$s, $\frac{Pert}{Orig}=V\%$     \\ % TODO insert result.
-13		& % TODO insert result.
+1		& $4\times n-6$ elements                                                     			\\
+2		& \emph{n/a}                                                                 			\\
+3		& \emph{n/a}                                                                 			\\
+4		& $k=10$                                                                     			\\
+5		& $k=22$	                                                             			\\
+6		& $\omega\in[1.105500, 1.212400]$                                            			\\
+7		& $k=13$                                                                     			\\
+8		& $k=22$                                                                     			\\
+9		& \emph{n/a}                                                                 			\\
+10		& Orig: $0.008563$s, Pert: $0.008500$s, $\frac{Pert}{Orig}=99.25\%$ 	     			\\
+11		& Orig: $0.003601$s, Pert: $0.001449$s, $\frac{Pert}{Orig}=40.23\%$ 	     			\\
+12		& GE, $k=7 \Rightarrow$ Orig: $13.95055$s, Pert: $13.94964$s, $\frac{Pert}{Orig}=99.99\%$	\\ 
+12		& SOR, $k=21 \Rightarrow$ Orig: $14.77553$s, Pert: $7.76254$s, $\frac{Pert}{Orig}=52.54\%$	\\
+13		& GE, Total average: 13.8909941537s								\\
+13		& SOR, Total average: 7.0320083050s
 \end{tabular}
 \caption{A concise presentation of the results.}
 \end{center}
@@ -216,12 +218,29 @@ With $n=8$ and $100$ time measurements, the mean time for solving the original s
 With $n=8$ and $100$ time measurements, the mean time for solving the original system ($Ax=b$) with SOR (in Fixed-Point Iteration mode) is $0.003601$ seconds and for the perturbed system ($A_p\times x=b_p$) $0.001449$ seconds (i.e. $40.23\%$ of the original mean time). We see that it is possible to solve slight different system iteratively with SOR very efficient if we can exploit solutions to an slight different system. This is very useful in real time applications such as signal processing because the sample rate is so high that not much will change from each sample to the next.
 
 \subsection{Task \#12}
-% TODO
+When redoing the previous two tasks but increasing k as much as posible it turns out that for GE $2^7$ systems could be measured 100 times to get average times for the original as $13.95055$ seconds and for the perturbed $13.94964$ seconds (i.e $\frac{Pert}{Orig}=99.99\%$ of the original mean.) For SOR it was $2^{21}$ and $14.77553$ seconds for the original system and $7.76254$ seconds for the perturbed (i.e. $\frac{Pert}{Orig}=52.54\%$ of the original mean). These k:s ($log_2()$) of the system size) represent how large systems we can have when we want to measure the average solve time $100$ times for GE and SOR as will be done in the next exercise.
+
 
 \subsection{Task \#13}
-% TODO
-
-
+% TODO 
+\begin{table}[h]
+\begin{center}
+\begin{tabular}{l l | l}
+\multicolumn{2}{r}{GE [s]} & SOR [s]  \\ \cline{2-3}
+		& 13.9126260200 & 7.6632646200 \\
+		& 13.8981966600 & 7.3282680400 \\
+		& 13.8661602900 & 7.1929892400 \\
+		& 13.9028463100 & 7.1854961600 \\
+		& 13.8716484400 & 7.0341115700 \\
+		& 13.9065633500 & 7.2155508300 \\
+		& 13.8556906300 & 5.4708077500 \\
+		& 13.9142215300 & 7.1655782300 \\
+Total mean	& 13.8909941537 & 7.0320083050
+\end{tabular}
+\caption{Average times when solving 8 pertubed systems 100 times each.}
+\end{center}
+\label{table+avgpert}
+\end{table}
 
 \section{Lessons Learned}
 From this project several theoretical understandings are gained.
