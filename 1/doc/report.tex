@@ -108,11 +108,11 @@ Task \# & Result \\ \hline
 9		& \emph{n/a}                                                                 			\\
 10		& Orig: $0.008563$s, Pert: $0.008500$s, $\frac{Pert}{Orig}=99.25\%$ 	     			\\
 11		& Orig: $0.003601$s, Pert: $0.001449$s, $\frac{Pert}{Orig}=40.23\%$ 	     			\\
-12		& GE, $k=7 \Rightarrow$ Orig: $13.95055$s, Pert: $13.94964$s, $\frac{Pert}{Orig}=99.99\%$	\\ 
+12		& GE, $k=7 \Rightarrow$ Orig: $13.95055$s, Pert: $13.94964$s, $\frac{Pert}{Orig}=99.99\%$	\\
 12		& SOR, $k=21 \Rightarrow$ Orig: $14.77553$s, Pert: $7.76254$s, $\frac{Pert}{Orig}=52.54\%$	\\
 12		& $k_\mathrm{best}=7$ 										\\
-13		& GE, Total average: 13.8909941537s								\\
-13		& SOR, Total average: 7.0320083050s % TODO insert new SOR mean.
+13		& GE, $k=7$, Total average: 13.8909941537s							\\
+13		& SOR, $k=7$,  Total average: 0.0032668375s
 \end{tabular}
 \caption{A concise presentation of the results.}
 \end{center}
@@ -215,14 +215,14 @@ After this change was made the script for task \#7 was now showed that SOR could
 \subsection{Task \#10}
 With $n=8$ and $100$ time measurements, the mean time for solving the original system ($A\times x=b$) with naive Gaussian elimination is $0.008563$ seconds  and for the perturbed system ($A_p\times x=b_p$) $0.008500$ seconds (i.e. $99.26\%$ of the original mean time). We see that there is almost no difference in solving a slightly different system.
 
-\subsection{Task \#11}
+\subsection{Task \#11} \label{sub+11}
 With $n=8$ and $100$ time measurements, the mean time for solving the original system ($Ax=b$) with SOR (in Fixed-Point Iteration mode) is $0.003601$ seconds and for the perturbed system ($A_p\times x=b_p$) $0.001449$ seconds (i.e. $40.23\%$ of the original mean time). We see that it is possible to solve slight different system iteratively with SOR very efficient if we can exploit solutions to an slight different system. This is very useful in real time applications such as signal processing because the sample rate is so high that not much will change from each sample to the next.
 
 Lets compare the results with the one found previously for GE.
 
 \begin{eqnarray}
-	\frac{\mathrm{mean}_{\mathrm{SOR, orig}}}{\mathrm{mean}_{\mathrm{GE, orig}}}=\frac{0.003601}{0.008563} & =42.053\% \\ \nonumber
-	\frac{\mathrm{mean}_{\mathrm{SOR, pert}}}{\mathrm{mean}_{\mathrm{GE, pert}}}=\frac{0.001449}{0.008500} & =17.047\% \nonumber
+	\frac{\mathrm{mean}_{\mathrm{SOR, orig}}}{\mathrm{mean}_{\mathrm{GE, orig}}}=\frac{0.003601}{0.008563} & =42.053\% \\
+	\frac{\mathrm{mean}_{\mathrm{SOR, pert}}}{\mathrm{mean}_{\mathrm{GE, pert}}}=\frac{0.001449}{0.008500} & =17.047\% \label{math+quota1}
 \end{eqnarray}
 
 We see that SOR is much better; especially for a perturbed system.
@@ -230,39 +230,34 @@ We see that SOR is much better; especially for a perturbed system.
 \subsection{Task \#12}
 When redoing the previous two tasks but increasing k as much as posible it turns out that for GE $2^7$ systems could be measured 100 times to get average times for the original as $13.95055$ seconds and for the perturbed $13.94964$ seconds (i.e $\frac{Pert}{Orig}=99.99\%$ of the original mean.) For SOR it was $2^{21}$ and $14.77553$ seconds for the original system and $7.76254$ seconds for the perturbed (i.e. $\frac{Pert}{Orig}=52.54\%$ of the original mean). These k:s ($log_2()$) of the system size) represent how large systems we can have when we want to measure the average solve time $100$ times for GE and SOR as will be done in the next exercise. The best n, the one that works for both GE and SOR, is $n=2^7$.
 
-
 \subsection{Task \#13}
-The results from running both GE and SOR $100$ times for $8$ perturbed systems are shown in table \ref{table+avgpert}. We see that the total means does not deviate so much from the mean times found in task $\#12$. The only thing I notes is the 7th perturbed system solved with SOR that had an average notworty lower than the rests. I belive that the discrepancy is caused by the fact that the \matlab{} process is running on a shared system where the OS decides what processes will get execution time. 
-
-
-%What is more intreressting is to ask if these results were the expected. If we assume that the execution time for the functions are linear we would from task $\#10$ and $\#11$ expect the average mean times to be:
-%\begin{displaymath}
-	%\mathrm{mean}_{GE,k=2^7}=\mathrm{mean}_{GE,k=2^3}\times2^{7-3}\times8=0.008500\times2^7=1.
-%\end {displaymath}
-
-Redoing the calculations from task $\#11$ gives:
-\begin{displaymath}
-	\frac{\mathrm{mean}_{\mathrm{SOR, pert}}}{\mathrm{mean}_{\mathrm{GE, pert}}}=\frac{7.0320083050}{13.8909941537} = 50.623\% % TODO new numbers for SOR.
-\end{displaymath}
+The results from running both GE and SOR $100$ times for $8$ perturbed systems are shown in table \ref{table+avgpert}. We see that the total means does not deviate so much from the mean times found in task $\#12$. The only thing I notes is the 7th perturbed system solved with SOR that had an average notworty lower than the rests. I belive that the discrepancy is caused by the fact that the \matlab{} process is running on a shared system where the OS decides what processes will get execution time.
 
 \begin{table}[h]
 \begin{center}
 \begin{tabular}{l l | l}
-\multicolumn{2}{r}{GE [s]} & SOR [s]  \\ \cline{2-3} % TODO insert new results for SOR.
-		& 13.9126260200 & 7.6632646200 \\
-		& 13.8981966600 & 7.3282680400 \\
-		& 13.8661602900 & 7.1929892400 \\
-		& 13.9028463100 & 7.1854961600 \\
-		& 13.8716484400 & 7.0341115700 \\
-		& 13.9065633500 & 7.2155508300 \\
-		& 13.8556906300 & 5.4708077500 \\
-		& 13.9142215300 & 7.1655782300 \\ \cline{2-3}
-Total mean	& 13.8909941537 & 7.0320083050 
+\multicolumn{2}{r}{GE [s]} & SOR [s]  \\ \cline{2-3}
+		& 13.9126260200 & 0.0034260700 \\
+		& 13.8981966600 & 0.0032473300 \\
+		& 13.8661602900 & 0.0034195100 \\
+		& 13.9028463100 & 0.0030180800 \\
+		& 13.8716484400 & 0.0032055200 \\
+		& 13.9065633500 & 0.0032118300 \\
+		& 13.8556906300 & 0.0034037200 \\
+		& 13.9142215300 & 0.0032026400 \\ \cline{2-3}
+Total mean	& 13.8909941537 & 0.0032668375
 \end{tabular}
 \caption{Average times when solving 8 perturbed systems 100 times each.}
 \end{center}
 \label{table+avgpert}
 \end{table}
+
+Redoing the calculations from task $\#11$ gives:
+\begin{eqnarray}
+	\frac{\mathrm{mean}_{\mathrm{SOR, pert}}}{\mathrm{mean}_{\mathrm{GE, pert}}}=\frac{0.0032668375}{13.8909941537} =  0.023518\% \label{math+quota2}
+\end{eqnarray}
+
+This quota (\ref{math+quota2}) is significantly lower than (\ref{math+quota1}). This proves the efficiency of using the iterative method SOR with initial guess being the solution (or approximation) to a known system. This is the final and most important point in the report.
 
 \section{Lessons Learned}
 From this project several theoretical understandings are gained.
@@ -270,7 +265,7 @@ From this project several theoretical understandings are gained.
 	\item Successive Over-Relaxation
 	\item Sparse matrices  and how it affects numerical analysis.
 	\item Benefits of using iterative methods on large systems that does not deviate much from a system with a known solution.
-	\item 
+	\item
 \end{itemize}
 
 In this project I've learned a lot about \matlab{}. It has been used in numerous coursed for Computer Scientist at LTH but not in any course have we really learned how to use it. After this project I really feel that I know how to use. This course or one including learning \matlab{} should have been included early in the education and not in the third year. More specifically:
@@ -292,9 +287,9 @@ In this project I've learned a lot about \matlab{}. It has been used in numerous
 \section{Acknowledgments}
 I first implemented all tasks my self. Then I discussed the results with friends and adjusted some small things.
 
-In exercise 3 in this course I, Gustaf Waldemarson and Erik Jansson implemented a simpler version of SOR. I used this as the basis for the SOR implementation in this project.
+In exercise $3$ in this course I, Gustaf Waldemarson and Erik Jansson implemented a simpler version of SOR. I used this as the basis for the SOR implementation in this project.
 
-With Tommy Ivarsson, Oscar Olsson and Tommy Olsson I discussed the stopping criteria for SOR. With the first Tommy I also discussed the results found in task $\#13$.
+With Tommy Ivarsson, Oscar Olsson and Tommy Olsson I discussed the stopping criteria for SOR. With the both Tommys and Gustaf Waldemarson I also discussed the results found in task $\#13$.
 
 \bibliography{references}{}
 \bibliographystyle{ieeetr}
@@ -308,30 +303,30 @@ Here the \matlab{} functions and scripts used to achieve the results above are l
 \subsection{Scripts}
 The following scrips are the drivers for producing the results found in this report.
 
-\lstinputlisting{../src/task2.m}
-\lstinputlisting{../src/task3.m}
-\lstinputlisting{../src/task4.m}
-\lstinputlisting{../src/task5.m}
-\lstinputlisting[literate={∈}{$\in$}1]{../src/task6.m} % Replace the malformed UTF8 sequence with the LaTeX equivalent.
-\lstinputlisting{../src/task7.m}
-\lstinputlisting{../src/task9.m}
-\lstinputlisting{../src/task10.m}
-\lstinputlisting{../src/task11.m}
-\lstinputlisting{../src/task12.m}
-\lstinputlisting{../src/task13.m}
+\lstinputlisting{src/task2.m}
+\lstinputlisting{src/task3.m}
+\lstinputlisting{src/task4.m}
+\lstinputlisting{src/task5.m}
+\lstinputlisting[literate={∈}{$\in$}1]{src/task6.m} % Replace the malformed UTF8 sequence with the LaTeX equivalent.
+\lstinputlisting{src/task7.m}
+\lstinputlisting{src/task9.m}
+\lstinputlisting{src/task10.m}
+\lstinputlisting{src/task11.m}
+\lstinputlisting{src/task12.m}
+\lstinputlisting{src/task13.m}
 
 \subsection{Functions}
 The following functions implements the algorithms and the rest serves as helper functions to these algorithms and the scripts. To distinguish these from other \matlab{}-functions in the global namespace these reside in a own package called \emph{pr1}.
 
-\lstinputlisting{../src/+pr1/init_task.m}
-\lstinputlisting{../src/+pr1/make_mat.m}
-\lstinputlisting{../src/+pr1/make_perturbed_mat.m}
-\lstinputlisting{../src/+pr1/naive_gauss.m}
-\lstinputlisting{../src/+pr1/duosolve_gauss.m}
-\lstinputlisting{../src/+pr1/multi_solve_gauss.m}
-\lstinputlisting{../src/+pr1/sor.m}
-\lstinputlisting{../src/+pr1/duosolve_sor.m}
-\lstinputlisting{../src/+pr1/multi_solve_sor.m}
-\lstinputlisting{../src/+pr1/time_out.m}
+\lstinputlisting{src/+pr1/init_task.m}
+\lstinputlisting{src/+pr1/make_mat.m}
+\lstinputlisting{src/+pr1/make_perturbed_mat.m}
+\lstinputlisting{src/+pr1/naive_gauss.m}
+\lstinputlisting{src/+pr1/duosolve_gauss.m}
+\lstinputlisting{src/+pr1/multi_solve_gauss.m}
+\lstinputlisting{src/+pr1/sor.m}
+\lstinputlisting{src/+pr1/duosolve_sor.m}
+\lstinputlisting{src/+pr1/multi_solve_sor.m}
+\lstinputlisting{src/+pr1/time_out.m}
 
 \end{document}

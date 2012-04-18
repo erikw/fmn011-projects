@@ -31,7 +31,7 @@ for i = 1:solve_times
 
 	% Perturbed system.
 	tic_id = tic();
-	[xp, itersp] = sor(Ap, bp, xp_cor, w, x, tol, maxit); % Initail guess is solution from above.
+	[xp, itersp] = sor(Ap, bp, xp_cor, w, x, tol, maxit); % Initial guess is solution from above.
 	times(i,2) = toc(tic_id);
 	%fprintf(1, 'Solved perturbed in %i iterations and %.5f seconds.\n', itersp, times(i,2));
 end

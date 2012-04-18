@@ -27,9 +27,10 @@ for s = 1:nbr_systems
 
      for i = 1:solve_times
         tic_id = tic();
-        sor(Ap, bp, xp_cor, w, x_init, tol, maxit);
+            x = sor(Ap, bp, xp_cor, w, x_init, tol, maxit);
         times(i) = toc(tic_id);
-    end
+     end
+    x_init = x;
     means(s) = mean(times);
 end
 end
