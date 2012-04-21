@@ -52,13 +52,56 @@
 \setcounter{page}{2}
 
 \section{Introduction and Problem Background}
-This project is about solving real-world problems with their accompanied complexities and ambiguities. The best method must be determined and its limitations and possible errors must be known. In this project intensity of light from stars will be studied. Stars produces a continuous curve of light over a range of frequencies called the \emph{spectrum} for that star. It can be measured in \emph{relative intensity} ($\frac{\mathrm{W}}{\mathrm{m}^2\times\mathrm{Hz}}$) as a function of the frequency (Hz) which is defined as the spectrum. What is interesting is that the surrounding gases of a star will either absorb (cold gas) or emit (warm) light which is visible at discrete fixed frequencies in the spectrum as \emph{spectral lines}. By identifying these spectral lines the components of the star can be found.
+This project is about solving real-world problems with their accompanied complexities and ambiguities. The best method must be determined and its limitations and possible errors must be known. In this project intensity of light from stars will be studied. Stars produces a continuous curve of light over a range of frequencies called the \emph{spectrum} for that star. It can be measured in \emph{relative intensity} ($\frac{\mathrm{W}}{\mathrm{m}^2\times\mathrm{Hz}}$) as a function of the frequency (Hz) which is defined as the spectrum. What is interesting is that the surrounding gases of a star will either absorb (cold gas) or emit (warm) light which is visible at discrete fixed frequencies in the spectrum as \emph{spectral lines}. By identifying these spectral lines the components of the star can be found  because each chemical composition have a unique fingerprint of discrete frequencies \cite{astronotes1} \cite{astronotes2}. % TODO is Hz in the numerator or denominator?
 
-In this project a measured continuous spectrum for a star is given which contains six spectral lines evenly divided in absorption lines and emissions lines. The task for this project is to find the total intensity for each of these spectral lines called the \emph{line strength} measured in $\frac{\mathrm{M}}{\mathrm{m}^2}$. This is achieved by finding the area under the curve at the peak-frequencies i.e. integrating the relative intensity over these frequencies.
+In this project a measured continuous spectrum for a star is given which contains six spectral lines evenly divided in absorption lines and emissions lines. The task for this project is to find the total intensity for each of these spectral lines called the \emph{line strength} measured in $\frac{\mathrm{M}}{\mathrm{m}^2}$ \cite{linestrength}. This is achieved by finding the area under the curve at the peak-frequencies i.e. integrating the relative intensity over these frequencies. % TODO why do you want the area?
+
+The given data is a file with $4000$ measurements of \emph{Specific Intensity} in $\frac{\mathrm{W}}{\mathrm{m}^2\times \mathrm{Hz}}$ at frequencies in the range $[3.50\times10^{14}, 4.29\times10^{14}]$.
 
 \section{Numerical Considerations}
 
 \section{Results \& Analysis}
+The first thing to do is, as always, to get an understanding of what are the given. Since studying the raw data is hard a graphical plot over the curve is desired to grasp the main characteristics of what we have. The relative intensity spectrum can be seen in figure \ref{fig+rellspec} and the spectrum itself in figure \ref{fig+spec}. In these two plots the six spectral lines are clearly visible. Just for the interest the intensities are also show as a function of the wave lengths in figure \ref{fig+specwave} using the \matlab{} function \emph{spectrumLabel}\cite{spectrumLabel}.
+
+
+\begin{figure}[hbt]
+\begin{center}
+\ifpdf
+	\includegraphics[width=\linewidth]{../img/spectrum_relative.png}
+\else
+	\includegraphics[width=\linewidth]{../img/spectrum_relative.eps}
+\fi
+\end{center}
+\caption{}
+\label{fig+rellspec}
+\end{figure}
+
+\begin{figure}[hbt]
+\begin{center}
+\ifpdf
+	\includegraphics[width=\linewidth]{../img/spectrum.png}
+\else
+	\includegraphics[width=\linewidth]{../img/spectrum.eps}
+\fi
+\end{center}
+\caption{}
+\label{fig+spec}
+\end{figure}
+
+\begin{figure}[hbt]
+\begin{center}
+\ifpdf
+	\includegraphics[width=\linewidth]{../img/spectrum_wave.png}
+\else
+	\includegraphics[width=\linewidth]{../img/spectrum_wave.eps}
+\fi
+\end{center}
+\caption{}
+\label{fig+specwave}
+\end{figure}
+\clearpage
+
+
 
 \section{Lessons Learned}
 From this project several theoretical understandings are gained.
@@ -92,6 +135,4 @@ The following functions implements the algorithms and the rest serves as helper 
 
 %\lstinputlisting{src/+pr1/init_task.m}
 
-% dummy ref
-\cite{forward+error}
 \end{document}
