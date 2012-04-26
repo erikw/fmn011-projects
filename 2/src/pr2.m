@@ -7,6 +7,7 @@ fprintf(1, '-->Project #2.\n');
 clear all
 %global d_freq, d_intens;
 [ d_freq,  d_intens ] = pr2.import_data('../spectrum_data.xls');
+d_freq_norm = (d_freq - mean(d_freq)) / std(d_freq);
 
 %% Plot relative spectrum.
 %fig = figure('visible','off'); % Don't display the plot.
@@ -116,6 +117,7 @@ for i = 2:length(peaks)
 	end
 end
 spectrum_indices = [spectrum_indices peaks(length(peaks),2):d_indices(end)];
+spectrum_indices_norm = (spectrum_indices - mean(spectrum_indices)) / std(spectrum_indices);
 peak_indices = setdiff(d_indices, spectrum_indices);
 spectrum_v = d_intens(spectrum_indices)';
 peak_v = d_intens(peak_indices);
@@ -125,34 +127,36 @@ plot(peak_indices, peak_v, 'r*'); % Plot points in the peak ranges, now, adjust 
 %saveas(plot_goodfit, '../img/spectrum_peaks.png', 'png')
 
 % Try fitting some lines to the spectrum.
-spectrum_line2 = polyfit(spectrum_indices, spectrum_v, 2);
+spectrum_line2 = polyfit(spectrum_indices_norm, spectrum_v, 2);
 spectrum_line2_v = polyval(spectrum_line2, spectrum_indices);
-plot(spectrum_indices, spectrum_line2_v, 'k') % black
+plot(spectrum_indices_norm, spectrum_line2_v, 'k') % black
 
-spectrum_line3 = polyfit(spectrum_indices, spectrum_v, 3);
+% Centering and normalization to solve bad condition. TODO why is it bad and why does this solves?
+spectrum_line3 = polyfit(spectrum_indices_norm, spectrum_v, 3);
+%spectrum_line3 = polyfit((spectrum_indices - mean(spectrum_indices))/std(spectrum_indices), spectrum_v, 3);
+spectrum_line3_v = polyval(spectrum_line3, spectrum_indices);
+plot(spectrum_indices_norm, spectrum_line3_v, 'm') % magenta
+
 % Check conditioning, see Sauer p.203.
 %A = [spectrum_indices.^0, spectrum_indices.^1, spectrum_indices.^2, spectrum_indices.^3, spectrum_indices.^4];
 %condn = cond(A'*A)
 
-spectrum_line3_v = polyval(spectrum_line3, spectrum_indices);
-plot(spectrum_indices, spectrum_line3_v, 'm') % magenta
-
-spectrum_line4 = polyfit(spectrum_indices, spectrum_v, 4);
-spectrum_line4_v = polyval(spectrum_line4, spectrum_indices);
-plot(spectrum_indices, spectrum_line4_v, 'c') % cyan
-
-spectrum_line = spectrum_line4;
-spectrum_line_v = spectrum_line4_v;
+spectrum_line4 = polyfit(spectrum_indices_norm, spectrum_v, 4);
+%spectrum_line4 = polyfit((spectrum_indices - mean(spectrum_indices)) / std(spectrum_indices), spectrum_v, 4);
+spectrum_line4_v = polyval(spectrum_line4, spectrum_indices_norm);
+plot(spectrum_indices_norm, spectrum_line4_v, 'c') % cyan
+% TODO fix these plots
 % TODO calc error of fitings or just take line4?
 
-saveas(plot_goodfit, '../img/spectrum_goodfit.eps', 'eps')
-saveas(plot_goodfit, '../img/spectrum_goodfit.png', 'png')
+%saveas(plot_goodfit, '../img/spectrum_goodfit.eps', 'eps')
+%saveas(plot_goodfit, '../img/spectrum_goodfit.png', 'png')
 set(fig_goodfit ,'visible','on') % Enable plots again.
-close(fig_goodfit);
-close all
+%close(fig_goodfit);
+%close all
 
-line_v = polyval(spectrum_line4, d_indices);
-peak_intens = d_intens' - line_v; % We want the arean between the curves.
+spectrum_line = polyfit(d_freq_norm(spectrum_indices), d_intens(spectrum_indices), 4);
+line_v = polyval(spectrum_line, d_freq_norm);
+peak_intens = d_intens - line_v; % We want the arean between the curves.
 
 % Assume symmetrical spectral lines.
 half_areas = zeros(6,1);
