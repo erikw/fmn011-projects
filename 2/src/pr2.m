@@ -76,7 +76,7 @@ clear all
 %% Try to find a fit for the underlying spectrum function by deleting the peaks and dips.
 % Plot relative spectrum.
 d_indices = 1:length(d_freq); % Plot by index for easier adjustments later.
-%fig_goodfit = figure('visible','off');
+fig_goodfit = figure('visible','off');
 %fig_goodfit = figure();
 plot_goodfit = plot(d_indices, d_intens, 'b');
 hold on
@@ -139,42 +139,27 @@ plot(spectrum_indices, spectrum_line4_v, 'c') % cyan
 
 spectrum_line = spectrum_line4;
 spectrum_line_v = spectrum_line4_v;
-
 % TODO calc error of fitings or just take line4?
-%saveas(plot_goodfit, '../img/spectrum_goodfit.eps', 'eps')
-%saveas(plot_goodfit, '../img/spectrum_goodfit.png', 'png')
 
-% Reset plot
-clf
-plot_goodfit = plot(d_indices, d_intens, 'b');
-hold on
-xlabel('Frequency [Hz]')
-ylabel('Relative intensity [W/(m^2*Hz)]')
-title('Good fitting to the spectrum function.')
-%plot(spectrum_indices, spectrum_line_v, 'g')
+saveas(plot_goodfit, '../img/spectrum_goodfit.eps', 'eps')
+saveas(plot_goodfit, '../img/spectrum_goodfit.png', 'png')
+set(fig_goodfit ,'visible','on') % Enable plots again.
+close(fig_goodfit);
+close all
 
-%plot(peak_indices, peak_v, 'r*');
-%peak6_lhs_indices = peaks(6,1):midpoints(6);
-%peak6_lhs_v = d_intens(peak6_lhs_indices);
-%plot(peak6_lhs_indices, peak6_lhs_v, 'g*')
-%peak6_area = 2 * trapz(peak6_lhs_indices, peak6_lhs_v)
 
 line_v = polyval(spectrum_line4, d_indices);
-
 peak_intens = d_intens' - line_v; % We want the arean between the curves.
+
 % Assume symmetrical spectral lines.
 half_areas = zeros(6,1);
 for i = 1:length(peaks)
 	if i == 5 % We only have right start point
-		half_areas(i) = trapz(midpoints(i):peaks(i,2), peak_intens(midpoints(i):peaks(i,2)));
+		half_areas(i) = trapz(d_freq(midpoints(i):peaks(i,2)), peak_intens(midpoints(i):peaks(i,2)));
 	else
-		half_areas(i) = trapz(peaks(i,1):midpoints(i), peak_intens(peaks(i,1):midpoints(i)));
+		half_areas(i) = trapz(d_freq(peaks(i,1):midpoints(i)), peak_intens(peaks(i,1):midpoints(i)));
 	end
 end
 
-
-
-%saveas(plot_goodfit, '../img/spectrum_.eps', 'eps')
-%saveas(plot_goodfit, '../img/spectrum_.png', 'png')
-%set(fig_goodfit ,'visible','on') % Enable plots again.
-%close(fig_goodfit);
+% The final answer.
+areas = abs(2 .* half_areas)
