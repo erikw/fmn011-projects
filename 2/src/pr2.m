@@ -130,6 +130,10 @@ spectrum_line2_v = polyval(spectrum_line2, spectrum_indices);
 plot(spectrum_indices, spectrum_line2_v, 'k') % black
 
 spectrum_line3 = polyfit(spectrum_indices, spectrum_v, 3);
+% Check conditioning, see Sauer p.203.
+%A = [spectrum_indices.^0, spectrum_indices.^1, spectrum_indices.^2, spectrum_indices.^3, spectrum_indices.^4];
+%condn = cond(A'*A)
+
 spectrum_line3_v = polyval(spectrum_line3, spectrum_indices);
 plot(spectrum_indices, spectrum_line3_v, 'm') % magenta
 
@@ -147,7 +151,6 @@ set(fig_goodfit ,'visible','on') % Enable plots again.
 close(fig_goodfit);
 close all
 
-
 line_v = polyval(spectrum_line4, d_indices);
 peak_intens = d_intens' - line_v; % We want the arean between the curves.
 
@@ -163,3 +166,5 @@ end
 
 % The final answer.
 areas = abs(2 .* half_areas)
+
+
