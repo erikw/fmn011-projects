@@ -57,17 +57,17 @@ ylabel('Relative intensity [W/(m^2*Hz)]')
 title('Bad fittings to the data directly.')
 
 
-warning off MATLAB:polyfit:RepeatedPointsOrRescale	% I know about the problem now.
+warning off MATLAB:polyfit:RepeatedPointsOrRescale	% I know about the problem.
 badfit2 = polyfit(d_freq, d_intens, 2);
-warning on MATLAB:polyfit:RepeatedPointsOrRescale	% I know about the problem now.
+warning on MATLAB:polyfit:RepeatedPointsOrRescale
 badfit2_v = polyval(badfit2, d_freq);
 plot(d_freq, badfit2_v, 'g')
 plot_badfit = plot(d_freq, d_intens, 'b');
 hold on
 
-warning off MATLAB:polyfit:RepeatedPointsOrRescale	% I know about the problem now.
+warning off MATLAB:polyfit:RepeatedPointsOrRescale
 badfit3 = polyfit(d_freq, d_intens, 3);
-warning on MATLAB:polyfit:RepeatedPointsOrRescale	% I know about the problem now.
+warning on MATLAB:polyfit:RepeatedPointsOrRescale	
 badfit3_v = polyval(badfit3, d_freq);
 plot(d_freq, badfit3_v, 'r')
 
