@@ -46,8 +46,6 @@ saveas(plot_wave, '../img/spectrum_wave.png', 'png')
 set(fig ,'visible','on') % Enable plots again.
 close(fig)
 
-
-
 % Try fitt polynomials to the data directly.
 fig_badfit = figure('visible','off'); % Don't display the plot.
 plot_badfit = plot(d_freq, d_intens, 'b');
@@ -67,7 +65,7 @@ hold on
 
 warning off MATLAB:polyfit:RepeatedPointsOrRescale
 badfit3 = polyfit(d_freq, d_intens, 3);
-warning on MATLAB:polyfit:RepeatedPointsOrRescale	
+warning on MATLAB:polyfit:RepeatedPointsOrRescale
 badfit3_v = polyval(badfit3, d_freq);
 plot(d_freq, badfit3_v, 'r')
 

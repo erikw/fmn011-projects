@@ -56,52 +56,49 @@ This project is about solving real-world problems with their accompanied complex
 
 In this project a measured continuous spectrum for a star is given which contains six spectral lines evenly divided in absorption lines and emissions lines. The task for this project is to find the total intensity for each of these spectral lines called the \emph{line strength} measured in $\frac{\mathrm{M}}{\mathrm{m}^2}$ \cite{linestrength}. This is achieved by finding the area under the curve at the peak-frequencies i.e. integrating the relative intensity over these frequencies. % TODO why do you want the area?
 
+The areas can not be found using analytical methods since we don't have the real spectrum and spectrum line functions -- just observations from it. We must find a way of finding the area from just these observations.
+
 The given data is a file with $4000$ measurements of \emph{Specific Intensity} in $\frac{\mathrm{W}}{\mathrm{m}^2\times \mathrm{Hz}}$ at frequencies in the range $[3.50\times10^{14}, 4.29\times10^{14}]$.
 
 \section{Numerical Considerations}
+For this problem there was no hints on what methods to be used. Therefore an iterative approach was used to find methods that works. The process will be describe in section \ref{sec:result}. As described there, I used some \matlab features including polynomial fitting in the least squares sense with the command \emph{polyfit} and estimation of areas using the trapezoidal method with the command \emph{trapz}.
 
-\section{Results \& Analysis}
-The first thing to do is, as always, to get an understanding of what are the given. Since studying the raw data is hard a graphical plot over the curve is desired to grasp the main characteristics of what we have. The relative intensity spectrum can be seen in figure \ref{fig+rellspec} and the spectrum itself in figure \ref{fig+spec}. In these two plots the six spectral lines are clearly visible. Just for the interest the intensities are also show as a function of the wave lengths in figure \ref{fig+specwave} using the \matlab{} function \emph{spectrumLabel}\cite{spectrumLabel}.
+\section{Results \& Analysis} \label{sec:result}
+All code used to get the results can be seen in Appendix \ref{appendix:programs}. The first thing to do is, as always, to get an understanding of what are the given. Since studying the raw data is hard a graphical plot over the curve is desired to grasp the main characteristics of what we have. The relative intensity spectrum can be seen in figure \ref{fig:rellspec} and the spectrum itself in figure \ref{fig:spec}. In these two plots the six spectral lines are clearly visible. Just for the interest the intensities are also show as a function of the wave lengths in figure \ref{fig:specwave} using the \matlab function \emph{spectrumLabel}\cite{spectrumLabel}.
 
+The first na\"{i}ve thing to do is to see if we can fit a curve the data directly. Just by trying out some, one seen in figure \ref{fig:badfit}, we can conclude that no polynomial can fit both the spectrum and the spectrum lines and give a good representation of the real functions. From this the main idea for solving this project was developed. We want to find function representing the spectrum  and then approximate the area between this function and the peaks/dips. To find this function we must first remove the distracting points from the spectrum lines. By plotting the data points as a function of their index in a graph the beginning, midpoints and endpoints for peaks/dips could be found. One had to zoom in very much in the graph to really see the hidden details of the slope. From these points some polynomial fittings was done as seen in figure \ref{fig:goodfit}.
 
-\begin{figure}[hbt]
+It was found that a polynomial of degree $4$ followed the curve good enough. Higher degrees did not to much better. The tricky point is the small and steep segment between the first dip and the second peak. Because of the large variety in the frequencies the matrix $A$ used by \emph{polyfit} is ill-conditioned $cond(A^T\times A=1.681060E+27$) giving results that can not be trusted the frequencies had to be normalized before fitting. % TODO insert correct condition number.
+
+For all but two spectrum lines we can now calculate the area by using the trapezoidal method by giving the start and end frequencies and the corresponding difference between the fitted curve and the measure relative intensities to the \matlab command \emph{trapz}. The results can be seen in table \ref{table:areas}.
+
+\begin{table}[h]
 \begin{center}
-\ifpdf
-	\includegraphics[width=\linewidth]{../img/spectrum_relative.png}
-\else
-	\includegraphics[width=\linewidth]{../img/spectrum_relative.eps}
-\fi
+\begin{tabular}{l | l} % TODO insert correct data.
+Spectrum Line & Area \\ \hline
+1		 & 2	   \\
+3		 & 4
+\end{tabular}
 \end{center}
-\caption{}
-\label{fig+rellspec}
-\end{figure}
+\caption{Full areas for the spectrum lines (double dip excluded).}
+\label{table:areas}
+\end{table}
 
-\begin{figure}[hbt]
+But what about the double dip? We're missing one boundary value for each of the dips and can thus not calculate the areas. Therefore we now assume that the distribution of spectrum frequencies are symmetric. By looking at the peaks/dips that we have we can see that they all seems to follow this. If we assume this the areas for the two dips can be found by finding the area for half of the line and multiply it by two. This was done for all points, in figure \ref{table:halfareas}, so the results can be compared to the one in table \ref{table:areas} % TODO refer to some physics about this.
+
+\begin{table}[h]
 \begin{center}
-\ifpdf
-	\includegraphics[width=\linewidth]{../img/spectrum.png}
-\else
-	\includegraphics[width=\linewidth]{../img/spectrum.eps}
-\fi
+\begin{tabular}{l | l} % TODO insert correct data.
+Spectrum Line & Area \\ \hline
+1		 & 2	   \\
+3		 & 4
+\end{tabular}
 \end{center}
-\caption{}
-\label{fig+spec}
-\end{figure}
+\caption{Areas found by calculating half the area and multiplying by two.}
+\label{table:halfareas}
+\end{table}
 
-\begin{figure}[hbt]
-\begin{center}
-\ifpdf
-	\includegraphics[width=\linewidth]{../img/spectrum_wave.png}
-\else
-	\includegraphics[width=\linewidth]{../img/spectrum_wave.eps}
-\fi
-\end{center}
-\caption{}
-\label{fig+specwave}
-\end{figure}
-\clearpage
-
-
+It is interesting to compare the full areas and the areas found by multiplying by two. So the infinity norm of the difference in areas (double dip excluded) was found to be $ 4.091669E+05$. If we divide that with the corresponding more accurate area (the one found by using the whole known interval) we get that the quota in percent is $12.589$. This must be considered high. But for the two dips with missing start/end points we some how have to guess leading us to approximate by calculate the half we know. There are of course other methods that might give worse or better guesses. But all boils down to making smart guesses -- we can not recover unknown information. % TODO insert correct data.
 
 \section{Lessons Learned}
 From this project several theoretical understandings are gained.
@@ -116,7 +113,7 @@ From this project several theoretical understandings are gained.
 
 \section{Acknowledgments}
 
-I worked tightly with Oscar Olsson, Tommy Ivarsson and Jonas Klauber.
+I worked tightly with Oscar Olsson, Tommy Ivarsson and Jonas Klauber when finding out the overall solution method.
 
 \bibliography{references}{}
 \bibliographystyle{ieeetr}
@@ -124,17 +121,84 @@ I worked tightly with Oscar Olsson, Tommy Ivarsson and Jonas Klauber.
 \newpage
 \section*{Appendix}
 \appendix
-\section{Program listings} \label{appendix+programs}
-Here the \matlab{} functions and scripts used to achieve the results above are listed.
+\section{Figures} \label{appendix:figures}
+
+\begin{figure}[hbt]
+\begin{center}
+\ifpdf
+	\includegraphics[width=\linewidth]{../img/spectrum_relative.png}
+\else
+	\includegraphics[width=\linewidth]{../img/spectrum_relative.eps}
+\fi
+\end{center}
+\caption{}
+\label{fig:rellspec}
+\end{figure}
+
+\begin{figure}[hbt]
+\begin{center}
+\ifpdf
+	\includegraphics[width=\linewidth]{../img/spectrum.png}
+\else
+	\includegraphics[width=\linewidth]{../img/spectrum.eps}
+\fi
+\end{center}
+\caption{}
+\label{fig:spec}
+\end{figure}
+
+\begin{figure}[hbt]
+\begin{center}
+\ifpdf
+	\includegraphics[width=\linewidth]{../img/spectrum_wave.png}
+\else
+	\includegraphics[width=\linewidth]{../img/spectrum_wave.eps}
+\fi
+\end{center}
+\caption{}
+\label{fig:specwave}
+\end{figure}
+
+\begin{figure}[hbt]
+\begin{center}
+\ifpdf
+	\includegraphics[width=\linewidth]{../img/bad_fits.png}
+\else
+	\includegraphics[width=\linewidth]{../img/bad_fits.eps}
+\fi
+\end{center}
+\caption{}
+\label{fig:badfit}
+\end{figure}
+
+\begin{figure}[hbt]
+\begin{center}
+\ifpdf
+	\includegraphics[width=\linewidth]{../img/spectrum_goodfit.png}
+\else
+	\includegraphics[width=\linewidth]{../img/spectrum_goodfit.eps}
+\fi
+\end{center}
+\caption{}
+\label{fig:goodfit}
+\end{figure}
+
+
+
+
+\clearpage
+
+\section{Program listings} \label{appendix:programs}
+Here the \matlab functions and scripts used to achieve the results above are listed.
 
 \subsection{Scripts}
 The following scrips are the drivers for producing the results found in this report.
 
-\lstinputlisting{src/pr2.m}
+\lstinputlisting{../src/pr2.m}
 
 \subsection{Functions}
-The following functions implements the algorithms and the rest serves as helper functions to these algorithms and the scripts. To distinguish these from other \matlab{}-functions in the global namespace these reside in a own package called \emph{pr2}.
+The following functions implements the algorithms and the rest serves as helper functions to these algorithms and the scripts. To distinguish these from other \matlab-functions in the global namespace these reside in a own package called \emph{pr2}.
 
-%\lstinputlisting{src/+pr1/init_task.m}
+\lstinputlisting{../src/+pr2/import_data.m}
 
 \end{document}
