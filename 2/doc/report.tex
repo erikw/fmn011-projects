@@ -57,7 +57,7 @@ This project is about solving real-world problems with their accompanied complex
 
 What is interesting is that the surrounding gases of a star will either absorb (cold gas) or emit (warm) light which is visible at discrete fixed frequencies in the spectrum as \emph{spectral lines}. By identifying these spectral lines the components of the star can be found  because each chemical composition have a unique fingerprint of discrete frequencies \cite{astronotes1} \cite{astronotes2}.
 
-In this project a measured continuous spectrum for a star is given which contains six spectral lines evenly divided in absorption lines and emissions lines. The task is to find the total intensity for each of these spectral lines called the \emph{line strength} measured in $\frac{\mathrm{M}}{\mathrm{m}^2}$ \cite{linestrength}. This is achieved by finding the area under the curve at the peak-frequencies i.e. integrating the relative intensity over these frequencies. % TODO why do you want the area?
+In this project a measured continuous spectrum for a star is given which contains six spectral lines evenly divided in absorption lines and emissions lines. The task is to find the total intensity for each of these spectral lines called the \emph{line strength} measured in $\frac{\mathrm{M}}{\mathrm{m}^2}$ \cite{linestrength}. This is achieved by finding the area under the curve at the peak-frequencies i.e. integrating the relative intensity over these frequencies. 
 
 The areas can not be found using analytical methods since we don't have the real spectrum and spectrum line functions -- just observations from it. We must find a way of finding the area from just these observations.
 
@@ -67,7 +67,7 @@ The given data is a file with $4000$ measurements of \emph{Specific Intensity} i
 For this problem there was no hints on what methods to be used. Therefore an iterative approach was used to find methods that works. The process will be describe in section \ref{sec:result}. As described there, I used some \matlab features including polynomial fitting in the least squares sense with the command \emph{polyfit} and estimation of areas using the trapezoidal method with the command \emph{trapz}. As later described there was a problem with an ill-conditioned matrix which was solved my normalization.
 
 \section{Results \& Analysis} \label{sec:result}
-All code used to get the results can be seen in Appendix \ref{appendix:programs}. The first thing to do is, as always, to get an understanding of what are the given. Since studying the raw data is hard a graphical plot over the curve is desired to grasp the main characteristics of what we have. The relative intensity spectrum can be seen in figure \ref{fig:rellspec} and the spectrum itself in figure \ref{fig:spec}. In these two plots the six spectral lines are clearly visible. Just because it is interesting, the intensities are also show as a function of the wave lengths in figure \ref{fig:specwave} using the \matlab function \emph{spectrumLabel}\cite{spectrumLabel}.
+All code used to get the results can be seen in Appendix \ref{appendix:programs}. The first thing to do is, as always, to get an understanding of what are the given. Since studying the raw data is hard a graphical plot over the curve is desired to grasp the main characteristics of what we have. The relative intensity spectrum can be seen in figure \ref{fig:rellspec} and the spectrum itself in figure \ref{fig:spec}. Looking at the spectrum (no the relative) and compare to the spectrum lines in \cite{astronotes1} we see that it looks like the curve for body with temperature $4000$ Kelvin for the human visible wavelengths. In these two plots the six spectral lines are clearly visible. Just because it is interesting, the intensities are also show as a function of the wave lengths in figure \ref{fig:specwave} using the \matlab function \emph{spectrumLabel}\cite{spectrumLabel}.
 
 The first na\"{i}ve thing to do is to see if we can fit a curve the data directly. Just by trying out some, one seen in figure \ref{fig:badfit}, we can conclude that no polynomial can fit both the spectrum and the spectrum lines and give a good representation of the real functions. From this the main idea for solving this project was developed. We want to find a function representing the spectrum and then approximate the area between this function and the peaks/dips.
 
@@ -92,7 +92,7 @@ Spectral Line & Area (full) \\ \hline
 \label{table:areas}
 \end{table}
 
-But what about the double dip? We're missing one boundary value for each of the dips and can thus not calculate the areas. Therefore we now assume that the distribution of spectrum frequencies are symmetric. By looking at the peaks/dips that we have we can see that they all seems to follow this. If we assume this the areas for the two dips can be found by finding the area for half of the line and multiply it by two. This was done for all points, in figure \ref{table:halfareas}, so the results can be compared to the one in table \ref{table:areas} % TODO refer to some physics about this.
+But what about the double dip? We're missing one boundary value for each of the dips and can thus not calculate the areas. Therefore we now assume that the distribution of spectrum frequencies are symmetric. By looking at the peaks/dips that we have we can see that they all seems to follow this. If we assume this the areas for the two dips can be found by finding the area for half of the line and multiply it by two. This was done for all points, in figure \ref{table:halfareas}, so the results can be compared to the one in table \ref{table:areas} 
 
 \begin{table}[h]
 \begin{center}
@@ -117,7 +117,7 @@ But for the two dips with missing start/end points we some how have to guess lea
 
 The difference between the full double dip area and sum of the symmetrically found individual areas are $2.406557E+06$. The sum is $11.311\%$ larger than the full double dip area. This difference is of course excepted since the areas overlaps for the two dips leading to a smaller area for the combined full dip.
 
-For all results above we must know the all are affected by approximations and can not be taken for being exact. The first source of error is when I select begin and endpoints for the peaks/dips with eye-measurements. Comparison with other the area results from friends that chose similar but not the exactly the same points gave no noticeable difference in the results. So hopefully the choose of points does not affect so much be is still a source of error. The curve fitting of the remaining points is also not perfect introducing errors in the final area difference. For the two dips that overlaps can possibly have some more errors since half of the area is doubled to get the total area. If there is a large error in the half area (caused by any of the two previously mentioned sourced) it will be doubled.
+For all results above we must know the all are affected by approximations and can not be taken for being exact. The first source of error is when I select begin and endpoints for the peaks/dips with eye-measurements. Comparison with other the area results from friends that chose similar but not the exactly the same points gave no noticeable difference in the results. So hopefully the choose of points does not affect so much be is still a source of error. The curve fitting of the remaining points is also not perfect introducing errors in the final area difference. The trapezoidal method is also an approximation so it does not give the exact area since we only have a finite set of data points to work with. For the two dips that overlaps can possibly have some more errors since half of the area is doubled to get the total area. If there is a large error in the half area (caused by any of the two previously mentioned sources) it will be doubled.
 
 \section{Lessons Learned}
 In this project I practiced on solving real problems as an engineer by combining previously learned knowledge in this and other courses to solve new types of problems. It was fun and instructive to finding methods of solving the problem. I've also learned to use some new tools in \matlab like \emph{trapz}, \emph{setdiff} and how to import data from proprietary formats like \excel. Also I've practiced on normalizing to avoid ill-conditioning.
@@ -205,8 +205,6 @@ I worked tightly with Oscar Olsson, Tommy Ivarsson and Jonas Klauber when findin
 \caption{The two highest data points for the spectral line.}
 \label{fig:peak6}
 \end{figure}
-
-
 
 \clearpage
 
