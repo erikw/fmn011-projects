@@ -35,11 +35,11 @@ close(fig)
 fig = figure('visible','off'); % Don't display the plot.
 ax = axes();
 d_wavelen = 2.998e8 ./ d_freq; % wavelength = c / freq.
-d_wintens = d_wavelen .* d_intens;
-plot_wave = plot(d_wavelen, d_wintens, 'b');
+%d_wintens = d_wavelen .* d_intens;
+plot_wave = plot(d_wavelen, d_intens, 'b');
 spectral_color.spectrumLabel(ax);
 xlabel('Wavelength [nm]')
-ylabel('Intensity [W/m^2]') % TODO correct?
+ylabel('Intensity [W/(m^2\lambda)]')
 title('Intensity spectrum.')
 saveas(plot_wave, '../img/spectrum_wave.eps', 'eps')
 saveas(plot_wave, '../img/spectrum_wave.png', 'png')
@@ -140,14 +140,12 @@ plot(spectrum_indices, spectrum_line4_v, 'c') % cyan
 
 % Check conditioning, see Sauer p.203.
 A = [ones(length(spectrum_indices),1) spectrum_indices' spectrum_indices.^2' spectrum_indices.^3' spectrum_indices.^4'];
-condition = cond(A'*A); % Ill conditioned! % TODO ridiculously high?
+condition = cond(A'*A); % Ill conditioned!
 fprintf(1, 'The conditon of A for the normal eqation for a polynomial fit of degree %i is %E\n', 4, condition);
 
-% Centering and normalization to solve bad condition. TODO why is it bad and why does this solves?
+% Centering and normalization to solve bad condition.
 % Normalize frequencies.
 d_freq_norm = (d_freq - mean(d_freq)) / std(d_freq);
-
-% TODO calc error of fitings or just take line4?
 
 saveas(plot_goodfit, '../img/spectrum_goodfit.eps', 'eps')
 saveas(plot_goodfit, '../img/spectrum_goodfit.png', 'png')
@@ -171,14 +169,15 @@ end
 
 areas_symm = abs(2 .* half_areas);
 areas_symm_str = sprintf('\t%E\n', areas_symm);
-fprintf(1, 'Areas found using symmetry is: \n[\n%s]\n', areas_symm_str); % TODO whar unit does the area have?
+fprintf(1, 'Areas in W/m^2 found using symmetry is: \n[\n%s]\n', areas_symm_str);
 
-
-% Calculate full areas for the 4 peaks we have left and right border for.
+% Calculate full areas for the 4 peaks we have left and right border for. The double dip (index 4) is couned as one dip.
 full_areas = zeros(6,1);
 for i = 1:length(peaks)
 	if ~(i == 4 || i == 5) % Skip the double dip.
 		full_areas(i) = trapz(d_freq(peaks(i,1):peaks(i,2)), peak_intens(peaks(i,1):peaks(i,2)));
+	elseif i == 4 
+		full_areas(i) = trapz(d_freq(peaks(i,1):peaks(i+1,2)), peak_intens(peaks(i,1):peaks(i+1,2)));
 	end
 end
 
@@ -192,6 +191,10 @@ areas_symm_parts = areas_symm([1:3 6]); % Skip double dip.
 areas_parts = areas([1:3 6]); % Skip double dip.
 area_diff = areas_symm_parts - areas_parts;
 %area_norm = norm(area_diff , Inf);
-[area_norm norm_pos]  = max(abs(area_diff));
+[area_norm norm_pos] = max(abs(area_diff));
 norm_quota = (area_norm / areas_parts(norm_pos)) * 100;
 fprintf(1, 'The infinity norm of the differnce in the two set of areas (double dip excluded) is %E. That is %.3f%% of the full area.\n', area_norm, norm_quota);
+
+dip_diff = abs(areas(4) - (areas_symm(4) + areas_symm(5)));
+dip_diff_quota = (dip_diff / areas(4)) * 100;
+fprintf(1, 'The difference between the full double dip area and sum of the symmetrically found individual areas are %E. The sum is %.3f%% larger than the full double dip area.\n', dip_diff, dip_diff_quota);
