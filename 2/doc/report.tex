@@ -119,6 +119,25 @@ The difference between the full double dip area and sum of the symmetrically fou
 
 For all results above we must know the all are affected by approximations and can not be taken for being exact. The first source of error is when I select begin and endpoints for the peaks/dips with eye-measurements. Comparison with other the area results from friends that chose similar but not the exactly the same points gave no noticeable difference in the results. So hopefully the choose of points does not affect so much be is still a source of error. The curve fitting of the remaining points is also not perfect introducing errors in the final area difference. The trapezoidal method is also an approximation so it does not give the exact area since we only have a finite set of data points to work with. For the two dips that overlaps can possibly have some more errors since half of the area is doubled to get the total area. If there is a large error in the half area (caused by any of the two previously mentioned sources) it will be doubled.
 
+To sum up, the final result for this project are the areas $1-3, 6$ from table \ref{table:areas} and areas $4-5$ from table \ref{table:halfareas} show in table \ref{table:finalareas}.
+
+
+\begin{table}[h]
+\begin{center}
+\begin{tabular}{l | l}
+Spectral Line & Area \\ \hline
+1   & 3.555511E+06 \\
+2   & 5.030370E+06 \\
+3   & 1.586236E+06 \\
+4   & 1.416181E+07 \\
+5   & 9.521223E+06 \\
+6   & 3.250223E+06
+\end{tabular}
+\end{center}
+\caption{The final areas forming the answer for this project.}
+\label{table:finalareas}
+\end{table}
+
 \section{Lessons Learned}
 In this project I practiced on solving real problems as an engineer by combining previously learned knowledge in this and other courses to solve new types of problems. It was fun and instructive to finding methods of solving the problem. I've also learned to use some new tools in \matlab like \emph{trapz}, \emph{setdiff} and how to import data from proprietary formats like \excel. Also I've practiced on normalizing to avoid ill-conditioning.
 
