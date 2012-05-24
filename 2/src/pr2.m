@@ -46,7 +46,7 @@ saveas(plot_wave, '../img/spectrum_wave.png', 'png')
 set(fig ,'visible','on') % Enable plots again.
 close(fig)
 
-% Try fitt polynomials to the data directly.
+% Try to fit polynomials to the data directly.
 fig_badfit = figure('visible','off'); % Don't display the plot.
 plot_badfit = plot(d_freq, d_intens, 'b');
 hold on
