@@ -155,7 +155,7 @@ close all
 
 spectrum_line = polyfit(d_freq_norm(spectrum_indices), d_intens(spectrum_indices), 4);
 line_v = polyval(spectrum_line, d_freq_norm);
-peak_intens = d_intens - line_v; % We want the arean between the curves.
+peak_intens = d_intens - line_v; % We want the area between the curves.
 
 % Assume symmetrical spectral lines.
 half_areas = zeros(6,1);
